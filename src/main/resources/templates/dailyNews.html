@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>robot</title>
+    <script th:src="@{~/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{~/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{~/css/bootstrap.min.css}">
+</head>
+
+<body>
+    <p><span th:text="${#dates.format(#dates.createNow(), 'yyyy年MM月dd')}"></span>技术日报:</p>
+    <ul th:if="${data.data != null}" class="list-group">
+        <li th:each="content : ${data.data}" class="list-group-item">
+            <span th:text="${content}"></span>
+        </li>
+    </ul>
+</body>
+</html>

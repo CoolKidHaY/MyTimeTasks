@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>robot</title>
+</head>
+<body>
+    <p>主人</p>
+    <p>刚刚萌哒哒的我帮你查询了你的域名哟~现在我来给你汇报情况啦~~~</p>
+    <p th:if="${#lists.isEmpty(data.data)}">哎呀，主人还没有注册域名呢，我怎么忘了呢~~</p>
+    <p th:if="${#lists.size(data.data)} > 0">
+        <span style="color: dodgerblue">运行正常的域名：</span>
+        <span th:each="domain : ${data.data}">
+            <a th:if="${domain.status == 'Active'}" th:href="@{domain.name}"><span th:text="${domain.name}"></span></a>
+        </span>
+
+    </p>
+    <p th:if="${#lists.size(data.data)} > 0">
+        <span style="color: darkred">停止续约的域名：</span>
+        <span th:each="domain : ${data.data}">
+            <span style="background-color: darkgreen" th:if="${domain.status != 'Active'}" th:text="${domain.name}"></span>
+        </span>
+    </p>
+    <p>emmmmmm, 除了以上内容，我还帮主人看了一下</p>
+    <p>
+        <span th:each="domain : ${data.data}">
+            <span style="color: greenyellow" th:if="${domain.status == 'Active'}" th:text="${domain.name}">
+            </span>还有<span th:text="${domain.expirationLastDay}"></span>天到期，还有<span th:text="${domain.renewOpenDay}"></span>天开启续约哟，
+        </span>
+    </p>
+</body>
+</html>
