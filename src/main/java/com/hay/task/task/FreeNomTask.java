@@ -1,4 +1,4 @@
-package com.hay.freenom.task;
+package com.hay.task.task;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
@@ -6,12 +6,12 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpStatus;
-import com.hay.freenom.context.BaseTask;
-import com.hay.freenom.entity.Domain;
-import com.hay.freenom.entity.FreeNomCookie;
-import com.hay.freenom.exception.BaseException;
-import com.hay.freenom.exception.CookieException;
-import com.hay.freenom.exception.LoginException;
+import com.hay.task.context.BaseTask;
+import com.hay.task.entity.Domain;
+import com.hay.task.entity.FreeNomCookie;
+import com.hay.task.exception.BaseException;
+import com.hay.task.exception.CookieException;
+import com.hay.task.exception.LoginException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -97,7 +98,6 @@ public class FreeNomTask implements BaseTask<List<Domain>> {
             // 清楚第一次请求残留的Cookie
             HttpRequest.getCookieManager().getCookieStore().removeAll();
         } catch (LoginException e){
-            log.error("登陆失败");
             throw new LoginException("FreeNomTask=====>登陆失败");
         }
         return cookie;
@@ -111,7 +111,7 @@ public class FreeNomTask implements BaseTask<List<Domain>> {
     @Override
     public String getHtml(String url, String cookie) throws BaseException {
         if (StrUtil.isBlank(cookie)){
-            log.error("getDomainHtml=>cookie为空");
+            throw new CookieException("getDomainHtml=>cookie为空");
         }
         // 请求域名页面
         HttpResponse execute = HttpRequest.get(url)

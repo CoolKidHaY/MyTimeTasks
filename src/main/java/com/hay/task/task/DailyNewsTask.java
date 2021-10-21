@@ -1,10 +1,11 @@
-package com.hay.freenom.task;
+package com.hay.task.task;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import com.hay.freenom.context.BaseTask;
-import com.hay.freenom.exception.BaseException;
+import com.hay.task.context.BaseTask;
+import com.hay.task.exception.BaseException;
+import com.hay.task.exception.TaskExecutedException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,9 +37,20 @@ public class DailyNewsTask implements BaseTask<List<String>> {
 
     @Override
     public List<String> getData() throws BaseException {
+        // 今天发送了停止当前线程
+        if (lastSendDate != null && lastSendDate.isEqual(LocalDate.now())){
+            throw new TaskExecutedException("DailyNewsTask任务已执行");
+        }
+        // 获取每日新闻的url
         String url = getDailyNewsUrl();
+        // 获取页面body
         String body = getHtml(url, null);
-        return parseHtml(body);
+        // 返回数据
+        List<String> list = parseHtml(body);
+        // 设置最后一次发送时间为今天
+        lastSendDate = LocalDate.now();
+        log.info("发送日期：{}", lastSendDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        return list;
     }
 
     @Override
@@ -48,13 +60,9 @@ public class DailyNewsTask implements BaseTask<List<String>> {
 
     @Override
     public String getHtml(String url, String cookie) throws BaseException{
-        if (lastSendDate != null && lastSendDate.isEqual(LocalDate.now())){
-            throw new BaseException("DailyNewsTask=====>getHtml已发送无须再发送");
-        }
-        String body = getDailyNewsUrl();
+        String body = HttpRequest.get(url).execute().body();
         if (StrUtil.isBlank(body)){
-            log.warn("DailyNewsTask=====>获取每日新闻html失败");
-            throw  new BaseException("DailyNewsTask=====>getHtml方法获取失败");
+            log.info("DailyNewsTask=====>getHtml方法获取失败");
         }
         return body;
     }
@@ -74,7 +82,6 @@ public class DailyNewsTask implements BaseTask<List<String>> {
     public String getDailyNewsUrl(){
         HttpResponse execute = HttpRequest.get("https://blog.csdn.net/csdngeeknews").execute();
         String body = execute.body();
-        // todo 解析html
         Document document = Jsoup.parse(body);
         Elements elements = document.getElementsByClass("article-list").get(0).getElementsByClass("article-item-box");
         List<Element> elementList = elements.subList(0, 3);
@@ -91,15 +98,13 @@ public class DailyNewsTask implements BaseTask<List<String>> {
                 long until = time.until(dateTime, ChronoUnit.SECONDS);
                 // 当五分钟前的时间小于文章发送的时间，则文章在上一次检查后推送的
                 if (until < 0 && until >= -300){
-                    // fa
+                    // 发
                     String url = element.getElementsByTag("a").attr("href");
                     url = url.replace("weixin_39786569", "csdngeeknews");
-                    HttpResponse response = HttpRequest.get(url).execute();
-                    System.out.println(response.getCookieStr());
-                    return response.body();
+                    return url;
                 }
             }
         }
-        return null;
+        return "";
     }
 }

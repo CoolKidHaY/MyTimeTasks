@@ -1,6 +1,6 @@
-package com.hay.freenom.context;
+package com.hay.task.context;
 
-import com.hay.freenom.exception.BaseException;
+import com.hay.task.exception.BaseException;
 
 /**
  * @title: BaseTask

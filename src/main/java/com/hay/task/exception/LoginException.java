@@ -1,4 +1,4 @@
-package com.hay.freenom.exception;
+package com.hay.task.exception;
 
 /**
  * @title: LoginException

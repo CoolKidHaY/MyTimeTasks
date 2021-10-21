@@ -1,6 +1,6 @@
-package com.hay.freenom.controller;
+package com.hay.task.controller;
 
-import com.hay.freenom.entity.FreeNomCookie;
+import com.hay.task.entity.FreeNomCookie;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

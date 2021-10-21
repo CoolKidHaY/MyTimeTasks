@@ -1,4 +1,4 @@
-package com.hay.freenom.entity;
+package com.hay.task.entity;
 
 import lombok.Data;
 

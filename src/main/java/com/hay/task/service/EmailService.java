@@ -1,6 +1,6 @@
-package com.hay.freenom.service;
+package com.hay.task.service;
 
-import com.hay.freenom.entity.EmailData;
+import com.hay.task.entity.EmailData;
 
 import javax.mail.MessagingException;
 

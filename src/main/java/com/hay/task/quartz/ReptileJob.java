@@ -1,11 +1,11 @@
-package com.hay.freenom.quartz;
+package com.hay.task.quartz;
 
-import com.hay.freenom.entity.Domain;
-import com.hay.freenom.entity.EmailData;
-import com.hay.freenom.exception.BaseException;
-import com.hay.freenom.service.EmailService;
-import com.hay.freenom.task.DailyNewsTask;
-import com.hay.freenom.task.FreeNomTask;
+import com.hay.task.entity.Domain;
+import com.hay.task.entity.EmailData;
+import com.hay.task.exception.BaseException;
+import com.hay.task.service.EmailService;
+import com.hay.task.task.DailyNewsTask;
+import com.hay.task.task.FreeNomTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class ReptileJob {
             data.setData(domains);
             emailService.sendEmail(data, "freeNom");
         } catch (BaseException | MessagingException e) {
-            log.error("executeFreeNomTask执行失败：{}" + e.getMessage());
+            log.warn("executeFreeNomTask执行失败：{}" + e.getMessage());
         }
     }
 
@@ -67,6 +67,7 @@ public class ReptileJob {
             emailService.sendEmail(data, "dailyNews");
         } catch (BaseException | MessagingException e){
             log.warn("executeDailyNewsTask执行失败：{}" + e.getMessage());
+            Thread.currentThread().interrupt();
         }
     }
 

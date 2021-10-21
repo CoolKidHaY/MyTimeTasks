@@ -1,8 +1,8 @@
-package com.hay.freenom.service.impl;
+package com.hay.task.service.impl;
 
-import com.hay.freenom.config.EmailConfig;
-import com.hay.freenom.entity.EmailData;
-import com.hay.freenom.service.EmailService;
+import com.hay.task.config.EmailConfig;
+import com.hay.task.entity.EmailData;
+import com.hay.task.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

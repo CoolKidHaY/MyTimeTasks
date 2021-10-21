@@ -1,4 +1,4 @@
-package com.hay.freenom.config;
+package com.hay.task.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
