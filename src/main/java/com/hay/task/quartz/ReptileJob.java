@@ -55,6 +55,7 @@ public class ReptileJob {
     }
 
     /**
+     * 每日技术报
      * 每天9点到10点，每隔5分钟执行一次
      */
     @Scheduled(cron = "0 0/5 9,10 * * ?")
@@ -67,7 +68,6 @@ public class ReptileJob {
             emailService.sendEmail(data, "dailyNews");
         } catch (BaseException | MessagingException e){
             log.warn("executeDailyNewsTask执行失败：{}" + e.getMessage());
-            Thread.currentThread().interrupt();
         }
     }
 

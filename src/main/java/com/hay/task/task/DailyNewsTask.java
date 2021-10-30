@@ -43,6 +43,9 @@ public class DailyNewsTask implements BaseTask<List<String>> {
         }
         // 获取每日新闻的url
         String url = getDailyNewsUrl();
+        if (StrUtil.isBlank(url)){
+            throw new TaskExecutedException("获取每日新闻url失败，今日新闻未推送。");
+        }
         // 获取页面body
         String body = getHtml(url, null);
         // 返回数据
@@ -62,7 +65,7 @@ public class DailyNewsTask implements BaseTask<List<String>> {
     public String getHtml(String url, String cookie) throws BaseException{
         String body = HttpRequest.get(url).execute().body();
         if (StrUtil.isBlank(body)){
-            log.info("DailyNewsTask=====>getHtml方法获取失败");
+            throw new BaseException("getHtml未获取到页面");
         }
         return body;
     }
