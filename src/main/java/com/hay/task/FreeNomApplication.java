@@ -1,5 +1,6 @@
 package com.hay.task;
 
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @Version 1.0
  * @Description: ADD YOUR DESCRIPTION
  */
+@NacosPropertySource(dataId = "Freenom-dev.yml",groupId = "myProject", autoRefreshed = true)
 @SpringBootApplication
 @EnableScheduling
 public class FreeNomApplication {
